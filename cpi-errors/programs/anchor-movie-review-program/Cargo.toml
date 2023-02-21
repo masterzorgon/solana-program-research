@@ -1,12 +1,12 @@
 [package]
-name = "cpis-errors"
+name = "anchor-movie-review-program"
 version = "0.1.0"
 description = "Created with Anchor"
 edition = "2021"
 
 [lib]
 crate-type = ["cdylib", "lib"]
-name = "cpis_errors"
+name = "anchor_movie_review_program"
 
 [features]
 no-entrypoint = []
