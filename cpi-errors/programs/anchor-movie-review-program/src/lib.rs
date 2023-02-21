@@ -17,6 +17,24 @@ pub mod anchor_movie_review_program {
         movie_review.title = title;
         movie_review.description = description;
         movie_review.rating = rating;
+
+        mint_to(
+            CpiContext::new_with_signer(
+                ctx.accounts.token_program.to_account_info(),
+                MintTo {
+                    authority: ctx.accounts.mint.to_account_info(),
+                    to: ctx.accounts.token_account.to_account_info(),
+                    mint: ctx.accounts.mint.to_account_info()
+                },
+                &[
+                    &[
+                        b"mint".as_ref(), 
+                        &[ctx.bumps.get("mint").unwrap()]
+                    ],
+                ]
+            ),
+            10 * 10^6 // adjust for mint decimals
+        )
         
         Ok(())
     }
@@ -26,6 +44,8 @@ pub mod anchor_movie_review_program {
         msg!("Title: {}", title);
         msg!("Description: {}", description);
         msg!("Rating: {}", rating);
+
+        require!(rating >= 1 && rating <= 5, MovieReviewError::InvalidRating);
         
         let movie_review = &mut ctx.accounts.movie_review;
         movie_review.description = description;
@@ -38,6 +58,37 @@ pub mod anchor_movie_review_program {
         msg!("Movie review for {} deleted", title);
         Ok(())
     }
+
+    pub fn initialize_token_mint(_ctx: Context<InitializeMint>) -> Result<()> {
+        msg!("Token mint initialized");
+        Ok(())
+    }
+}
+
+#[error_code]
+pub enum MovieReviewError {
+    #[msg("Rating must be between 1 and 5")]
+    InvalidRating,
+}
+
+#[derive(Accounts)]
+pub struct InitializeMint<'info> {
+    #[account(
+        init,
+        seeds = [b"mint".as_ref()],,
+        bump,
+        payer = user,
+        mint::decimals = 6,
+        mint::authority = user
+    )]
+    pub mint: Account<'info, Mint>,
+
+    #[account(mut)]
+    pub user: Signer<'info>,
+
+    pub token_program: Program<'info, Token>,
+    pub rent: Sysvar<'info, Rent>,
+    pub system_program: Program<'info, System>
 }
 
 #[derive(Accounts)]
@@ -51,9 +102,26 @@ pub struct AddMovieReview<'info> {
         space = 8 + 32 + 1 + 4 + title.len() + 4 + description.len()
     )]
     pub movie_review: Account<'info, MovieAccountState>,
+
     #[account(mut)]
     pub initializer: Signer<'info>,
+
     pub system_program: Program<'info, System>,
+
+    pub token_program: Program<'info, Token>,
+
+    #[account(seeds = [b"mint".as_ref()], bump, mut)]
+    pub mint: Account<'info, Mint>,
+
+    #[account(
+        init_if_needed,
+        payer = initializer,
+        associated_token::mint = mint,
+        associated_token::authority = initializer
+    )]
+    pub token_account: Account<'info, TokenAccount><
+    pub associated_token_program: Program<'info, AssociatedToken>,
+    pub rent: Sysvar<'info, Rent>
 }
 
 #[derive(Accounts)]
