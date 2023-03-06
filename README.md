@@ -6,14 +6,14 @@ The project uses smart contracts to create unique NFTs for each invoice. These N
 
 ## Getting Started
 To get started with the project, you will need to have the following software installed:
-* Solana command-line tools
-* Rust programming language
-* Node
-* Yarn
-* Cargo
-* Anchor
-* TypeScript
-* Git
+* [Solana command-line tools](https://docs.solana.com/cli/install-solana-cli-tools)
+* [Rust programming language](https://www.rust-lang.org/)
+* [Node](https://nodejs.org/en/)
+* [Yarn](https://yarnpkg.com/)
+* [Cargo](https://crates.io/)
+* [Anchor](https://www.anchor-lang.com/)
+* [TypeScript](https://www.typescriptlang.org/)
+* [Git](https://git-scm.com/)
 
 Once you have these tools installed, you can clone the repository and run the following commands:
 
