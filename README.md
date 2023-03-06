@@ -1,5 +1,5 @@
 # blockchain-research
-This was developed by [Nathan Galindo](https://www.linkedin.com/in/nathan-galindo/) as part of an academic research project at Baylor University which lookes into how NFT technology can enhance financial services, such as invoicing.
+This codebase was developed by [Nathan Galindo](https://www.linkedin.com/in/nathan-galindo/) as part of an academic research project at Baylor University which lookes into how NFT technology can enhance financial services, such as invoicing.
 
 ## How it Works
 The project uses smart contracts to create unique NFTs for each invoice. These NFTs represent the invoice and contain all necessary information such as the amount due, due date, and payment details. The NFTs can be easily transferred between parties and tracked on the Solana blockchain, providing a transparent and secure way of handling invoicing.
