@@ -1,0 +1,16 @@
+[features]
+seeds = false
+skip-lint = false
+[programs.localnet]
+main = "GwX7HeaaspNTYa6XocC9gDyPRD6jWKujPMarrJE6iNP4"
+proxy = "Ci7X76k9sFimgZGSrm2F8DSkmKXVSUoqxQzg5nsH6ajc"
+
+[registry]
+url = "https://api.apr.dev"
+
+[provider]
+cluster = "localnet"
+wallet = "/Users/masterzorgon/.config/solana/id.json"
+
+[scripts]
+test = "yarn run ts-mocha -p ./tsconfig.json -t 1000000 tests/**/*.ts"
