@@ -1,4 +1,4 @@
-# blockchain-research
+# NFT Invoicing
 This codebase was developed by [Nathan Galindo](https://www.linkedin.com/in/nathan-galindo/) as part of an academic research project at Baylor University which lookes into how NFT technology can enhance financial services, such as invoicing.
 
 ## How it Works
