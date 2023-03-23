@@ -2,8 +2,7 @@
 seeds = false
 skip-lint = false
 [programs.localnet]
-main = "GwX7HeaaspNTYa6XocC9gDyPRD6jWKujPMarrJE6iNP4"
-proxy = "Ci7X76k9sFimgZGSrm2F8DSkmKXVSUoqxQzg5nsH6ajc"
+cpipda = "Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS"
 
 [registry]
 url = "https://api.apr.dev"
