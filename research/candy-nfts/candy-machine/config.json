@@ -1,0 +1,22 @@
+{
+  "tokenStandard": "nft",
+  "number": 10,
+  "symbol": "PEPE",
+  "sellerFeeBasisPoints": 100,
+  "isMutable": true,
+  "isSequential": false,
+  "creators": [
+    {
+      "address": "ASxqqf3BbQnRcuK6UKN6BSz2wwtKoTmp698yzMKDUmjn",
+      "share": 100
+    }
+  ],
+  "uploadMethod": "bundlr",
+  "ruleSet": null,
+  "awsConfig": null,
+  "nftStorageAuthToken": null,
+  "shdwStorageAccount": null,
+  "pinataConfig": null,
+  "hiddenSettings": null,
+  "guards": null
+}
