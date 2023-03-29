@@ -1,16 +1,16 @@
 use anchor_lang::prelude::*;
 
 use crate::state::{
-    supplier::GameDataAccount,
+    supplier::Supplier,
 };
 
 #[derive(AnchorSerialize, AnchorDeserialize, Clone, Debug)]
 pub struct CreateSupplierArgs {
-    name: String,
-    address: String,
-    phone: String,
-    email: String,
-    routing_number: u64,
+    pub name: String,
+    pub address: String,
+    pub phone: String,
+    pub email: String,
+    pub routing_number: u64,
 }
 
 #[derive(Accounts)]

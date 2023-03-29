@@ -1,5 +1,9 @@
 use anchor_lang::prelude::*;
 
+use crate::instructions::{
+    create_supplier::CreateSupplierArgs,
+};
+
 #[account]
 pub struct Supplier {
     pub bump: u8,
