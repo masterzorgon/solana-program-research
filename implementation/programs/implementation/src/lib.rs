@@ -1,15 +1,17 @@
 use anchor_lang::prelude::*;
 
-declare_id!("Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS");
+mod state;
+mod instructions;
+
+use instructions::*;
+
+declare_id!("A8aZpHiJhbHawHQ6g4mhaxPTXBGoc5bQecaRkro2hyGe");
 
 #[program]
 pub mod implementation {
     use super::*;
 
-    pub fn initialize(ctx: Context<Initialize>) -> Result<()> {
-        Ok(())
+    pub fn create_supplier(ctx: Context<CreateSupplier>, args: CreateSupplierArgs) -> Result<()> {
+        create_supplier::create_supplier(ctx, args)
     }
 }
-
-#[derive(Accounts)]
-pub struct Initialize {}
