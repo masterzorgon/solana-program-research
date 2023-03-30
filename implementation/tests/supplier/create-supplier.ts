@@ -1,6 +1,6 @@
 import * as anchor from "@project-serum/anchor";
 import { Program } from "@project-serum/anchor";
-import { Implementation } from "../target/types/implementation";
+import { Implementation } from "../../target/types/implementation";
 import { assert } from "chai";
 import fs from "fs";
 

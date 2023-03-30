@@ -1,8 +1,14 @@
 use anchor_lang::prelude::*;
 
-use crate::instructions::{
-    create_supplier::SupplierArgs,
-};
+use crate::args::{ supplier_args::* };
+
+/*
+    upon creation of supplier account, the supplier is defined to have a transactional relationship
+    with 1+ business units.
+
+    for each transactional relationship, a master nft is minted. the address of the master nft is
+    stored with the supplier account. the master nft is then used to mint a child nft for each
+*/
 
 #[account]
 pub struct Supplier {
@@ -13,7 +19,7 @@ pub struct Supplier {
     pub phone: String,
     pub email: String,
     pub routing_number: u32,
-    pub invoices: Vec<Pubkey>,
+    pub relationships: Vec<Relationship>,
     pub total_transactions: u64,
 }
 
@@ -29,7 +35,13 @@ impl Supplier {
         args.phone.len() + // phone
         args.email.len() + // email
         4 + // routing_number
-        1_000 + // invoices
+        (
+            args.relationships.len() * (
+                40 + // supplier
+                40 + // business_unit
+                32 // master_edition
+            )
+        ) + // relationships
         8 // total_transactions
     }
 }

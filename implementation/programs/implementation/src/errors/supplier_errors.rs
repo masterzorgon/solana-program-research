@@ -14,4 +14,6 @@ pub enum SupplierError {
     SupplierEmailTooLong,
     #[msg("The supplier routing number does not meet the length requirements")]
     SupplierRoutingNumberLengthMismatch,
+    #[msg("The supplier relationships are too long")]
+    SupplierRelationshipsTooLong,
 }

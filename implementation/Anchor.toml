@@ -13,3 +13,5 @@ wallet = "/Users/masterzorgon/.config/solana/id.json"
 
 [scripts]
 test = "yarn run ts-mocha -p ./tsconfig.json -t 1000000 tests/**/*.ts"
+create-supplier = "yarn run ts-mocha -p ./tsconfig.json -t 1000000 tests/supplier/create-supplier.ts"
+update-supplier = "yarn run ts-mocha -p ./tsconfig.json -t 1000000 tests/supplier/update-supplier.ts"

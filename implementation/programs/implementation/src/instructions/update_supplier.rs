@@ -1,14 +1,14 @@
 use anchor_lang::prelude::*;
 
-use crate::state::{ supplier::* };
-use crate::errors::{ supplier_errors::* };
-use crate::args::{ supplier_args::* };
+use crate::args::{ supplier_args::SupplierArgs };
+use crate::state::{ supplier::Supplier };
+use crate::errors::{ supplier_errors::SupplierError };
 
 #[derive(Accounts)]
 #[instruction(args: SupplierArgs)]
-pub struct CreateSupplier<'info> {
+pub struct UpdateSupplier<'info> {
     #[account(
-        init_if_needed, // initializes the account if it does not exist
+        mut,
         seeds = [
             Supplier::PREFIX.as_ref(),
             b"_",
@@ -16,42 +16,15 @@ pub struct CreateSupplier<'info> {
             b"_",
             signer.key.as_ref()
         ],
-        bump,
-        payer = signer,
-        space = Supplier::calc_space(&args)
+        bump = supplier.bump,
     )]
     pub supplier: Account<'info, Supplier>,
-
-    #[account(mut)]
+    
     pub signer: Signer<'info>,
-
-    pub system_program: Program<'info, System>
 }
 
-pub fn create_supplier(ctx: Context<CreateSupplier>, args: SupplierArgs) -> Result<()> {
+pub fn update_supplier(ctx: Context<UpdateSupplier>, args: SupplierArgs) -> Result<()> {
     let supplier = &mut ctx.accounts.supplier;
-
-    let (addr, bump) = Pubkey::find_program_address(
-        &[
-            Supplier::PREFIX.as_ref(),
-            b"_",
-            args.name.as_bytes().as_ref(),
-            b"_",
-            ctx.accounts.signer.key.as_ref()
-        ],
-        ctx.program_id
-    );
-    
-    supplier.bump = bump;
-    supplier.identifier = addr;
-
-    supplier.total_transactions = 0;
-
-    require!(args.relationships.len() <= 6, SupplierError::SupplierRelationshipsTooLong);
-    supplier.relationships = vec![];
-    for relationship in args.relationships {
-        supplier.relationships.push(relationship);
-    }
 
     // make sure name is not too long
     require!(args.name.len() <= 40, SupplierError::SupplierNameTooLong);
@@ -72,8 +45,6 @@ pub fn create_supplier(ctx: Context<CreateSupplier>, args: SupplierArgs) -> Resu
     // make sure routing number is 9 digits
     require!(args.routing_number.to_string().len() == 9, SupplierError::SupplierRoutingNumberLengthMismatch);
     supplier.routing_number = args.routing_number;
-
-    msg!("Supplier created successfully!: {}", supplier.name);
 
     Ok(())
 }
