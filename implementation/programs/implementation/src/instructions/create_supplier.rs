@@ -4,8 +4,12 @@ use crate::state::{
     supplier::Supplier,
 };
 
+use crate::errors::{
+    supplier_errors::SupplierError,
+};
+
 #[derive(AnchorSerialize, AnchorDeserialize, Clone, Debug)]
-pub struct CreateSupplierArgs {
+pub struct SupplierArgs {
     pub name: String,
     pub address: String,
     pub phone: String,
@@ -14,7 +18,7 @@ pub struct CreateSupplierArgs {
 }
 
 #[derive(Accounts)]
-#[instruction(args: CreateSupplierArgs)]
+#[instruction(args: SupplierArgs)]
 pub struct CreateSupplier<'info> {
     #[account(
         init_if_needed, // initializes the account if it does not exist
@@ -37,23 +41,7 @@ pub struct CreateSupplier<'info> {
     pub system_program: Program<'info, System>
 }
 
-#[error_code]
-pub enum CreateSupplierError {
-    #[msg("The supplier already exists")]
-    SupplierAlreadyExists,
-    #[msg("The supplier name is too long")]
-    SupplierNameTooLong,
-    #[msg("The supplier address is too long")]
-    SupplierAddressTooLong,
-    #[msg("The supplier phone is too long")]
-    SupplierPhoneTooLong,
-    #[msg("The supplier email is too long")]
-    SupplierEmailTooLong,
-    #[msg("The supplier routing number does not meet the length requirements")]
-    SupplierRoutingNumberLengthMismatch,
-}
-
-pub fn create_supplier(ctx: Context<CreateSupplier>, args: CreateSupplierArgs) -> Result<()> {
+pub fn create_supplier(ctx: Context<CreateSupplier>, args: SupplierArgs) -> Result<()> {
     let supplier = &mut ctx.accounts.supplier;
 
     let (addr, bump) = Pubkey::find_program_address(
@@ -76,35 +64,35 @@ pub fn create_supplier(ctx: Context<CreateSupplier>, args: CreateSupplierArgs) -
     // make sure name is not too long
     require!(
         args.name.len() <= 40, 
-        CreateSupplierError::SupplierNameTooLong
+        SupplierError::SupplierNameTooLong
     );
     supplier.name = args.name;
 
     // make sure address is not too long
     require!(
         args.address.len() <= 40, 
-        CreateSupplierError::SupplierAddressTooLong
+        SupplierError::SupplierAddressTooLong
     );
     supplier.address = args.address;
 
     // make sure phone is not too long
     require!(
         args.phone.len() <= 40 && args.phone.len() >= 10, 
-        CreateSupplierError::SupplierPhoneTooLong
+        SupplierError::SupplierPhoneTooLong
     );
     supplier.phone = args.phone;
 
     // make sure email is not too long
     require!(
         args.email.len() <= 40, 
-        CreateSupplierError::SupplierEmailTooLong
+        SupplierError::SupplierEmailTooLong
     );
     supplier.email = args.email;
 
     // make sure routing number is 9 digits
     require!(
         args.routing_number.to_string().len() == 9, 
-        CreateSupplierError::SupplierRoutingNumberLengthMismatch
+        SupplierError::SupplierRoutingNumberLengthMismatch
     );
     supplier.routing_number = args.routing_number;
 

@@ -1,7 +1,7 @@
 use anchor_lang::prelude::*;
 
 use crate::instructions::{
-    create_supplier::CreateSupplierArgs,
+    create_supplier::SupplierArgs,
 };
 
 #[account]
@@ -20,7 +20,7 @@ pub struct Supplier {
 impl Supplier {
     pub const PREFIX: &'static [u8] = b"SUPPLIER";
 
-    pub fn calc_space(args: &CreateSupplierArgs) -> usize {
+    pub fn calc_space(args: &SupplierArgs) -> usize {
         8 + // discriminator
         1 + // bump
         32 + // identifier
