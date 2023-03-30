@@ -20,21 +20,21 @@ describe("implementation", () => {
       address: "1234 Main St",
       phone: "123-456-7890",
       email: "fallfarms@gmail.com",
-      routingNumber: new anchor.BN(123456789)
+      routingNumber: 123456789
     },
     {
       name: "Cheeky Chickens",
       address: "131 South Ave",
       phone: "222-333-1411",
       email: "cheekychickens@gmail.com",
-      routingNumber: new anchor.BN(987654321)
+      routingNumber: 987654321
     },
     {
       name: "Corby's Cows",
       address: "222 Crescent Rd",
       phone: "333-444-5555",
       email: "corbyscows@gmai.com",
-      routingNumber: new anchor.BN(198273645),
+      routingNumber: 198273645,
     }
   ];
 
@@ -43,7 +43,7 @@ describe("implementation", () => {
     address: string,
     phone: string,
     email: string,
-    routingNumber: anchor.BN
+    routingNumber: number
   }
 
   // get supplier PDAs
@@ -67,7 +67,7 @@ describe("implementation", () => {
       const supplierPDA = supplierPDAs[index];
 
       // create supplier account
-      await program.methods
+      const tx = await program.methods
         .createSupplier(supplier as CreateSupplierArgs)
         .accounts({
           supplier: supplierPDA,
@@ -96,6 +96,8 @@ describe("implementation", () => {
         "/Users/masterzorgon/Documents/Programming/personal-projects/blockchain/blockchain-research/implementation/tests/supplier-data/config.json",
         JSON.stringify(config, null, 4)
       );
+
+      console.log("transaction successful: ", tx);
     });
   });
 });

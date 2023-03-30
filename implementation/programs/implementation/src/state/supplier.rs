@@ -12,7 +12,7 @@ pub struct Supplier {
     pub address: String,
     pub phone: String,
     pub email: String,
-    pub routing_number: u64,
+    pub routing_number: u32,
     pub invoices: Vec<Pubkey>,
     pub total_transactions: u64,
 }
@@ -28,7 +28,7 @@ impl Supplier {
         args.address.len() + // address
         args.phone.len() + // phone
         args.email.len() + // email
-        8 + // routing_number
+        4 + // routing_number
         1_000 + // invoices
         8 // total_transactions
     }
