@@ -14,12 +14,6 @@ use crate::args::{ supplier_args::* };
     transaction that occurs between the supplier and the business
 */
 
-pub struct Relationship {
-    pub supplier_name: String,
-    pub business_unit_name: String,
-    pub master_edition: Pubkey,
-}
-
 #[account]
 pub struct Supplier {
     pub signer: Pubkey,
@@ -30,7 +24,7 @@ pub struct Supplier {
     pub phone: String,
     pub email: String,
     pub routing_number: String,
-    pub relationships: Vec<Relationship>,
+    pub relationships: Vec<Pubkey>,
     pub total_transactions: u64,
 }
 
@@ -47,13 +41,7 @@ impl Supplier {
         args.phone.len() + // phone
         args.email.len() + // email
         args.routing_number.len() + // routing_number (base64-bash encoded string)
-        (
-            6 * (
-                40 + // supplier name
-                40 + // business_unit name
-                32 // master_edition address
-            )
-        ) + // relationships
+        (6 * 32) + // relationships
         8 // total_transactions
     }
 }

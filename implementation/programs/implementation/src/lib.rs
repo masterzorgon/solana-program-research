@@ -22,7 +22,7 @@ pub mod implementation {
         update_supplier::update_supplier(ctx, args)
     }
 
-    pub fn create_relationship(ctx: Context<CreateRelationship>, args: Vec<RelationshipArgs>) -> Result<()> {
+    pub fn create_relationship(ctx: Context<CreateRelationship>, args: Vec<CreateRelationshipArgs>) -> Result<()> {
         create_relationship::create_relationship(ctx, args)
     }
 }

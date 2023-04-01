@@ -14,12 +14,4 @@ pub enum SupplierError {
     SupplierEmailTooLong,
     #[msg("The supplier routing number does not meet the length requirements")]
     SupplierRoutingNumberLengthMismatch,
-    #[msg("The supplier relationships are too long")]
-    SupplierRelationshipsTooLong,
-    #[msg("You cannot create duplicate supplier relationships")]
-    DuplicateSupplierRelationship,
-    #[msg("You cannot create a relationship with a supplier that already exists")]
-    ExistingSupplierRelationship,
-    #[msg("The business unit name does not exist")]
-    BusinessUnitNameNotValid
 }

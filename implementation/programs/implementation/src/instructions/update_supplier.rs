@@ -5,14 +5,13 @@ use crate::state::{ supplier::* };
 use crate::errors::{ supplier_errors::* };
 
 #[derive(Accounts)]
-#[instruction(args: UpdateSupplierArgs)]
 pub struct UpdateSupplier<'info> {
     #[account(
         mut,
         seeds = [
             Supplier::PREFIX.as_ref(),
             b"_",
-            &args.name.unwrap().as_bytes(),
+            &supplier.name.unwrap().as_bytes(),
             b"_",
             signer.key.as_ref()
         ],

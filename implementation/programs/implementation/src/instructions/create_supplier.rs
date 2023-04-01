@@ -38,7 +38,7 @@ pub fn create_supplier(
         &[
             Supplier::PREFIX.as_ref(),
             b"_",
-            args.name.as_bytes().as_ref(),
+            &args.name.as_bytes(),
             b"_",
             ctx.accounts.signer.key.as_ref()
         ],
