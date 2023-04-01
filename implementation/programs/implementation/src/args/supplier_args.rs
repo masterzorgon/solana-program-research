@@ -1,12 +1,12 @@
 use anchor_lang::prelude::*;
 
 #[derive(AnchorSerialize, AnchorDeserialize, Clone, Debug, Default)]
-pub struct Relationship {
+pub struct RelationshipArgs {
     pub supplier_name: String,
     pub business_unit_name: String,
-    pub master_edition: Pubkey,
 }
 
+// all fields are mandatory
 #[derive(AnchorSerialize, AnchorDeserialize, Clone, Debug)]
 pub struct CreateSupplierArgs {
     pub name: String,
@@ -16,6 +16,7 @@ pub struct CreateSupplierArgs {
     pub routing_number: String,
 }
 
+// all fields are optional
 #[derive(AnchorSerialize, AnchorDeserialize, Clone, Debug)]
 pub struct UpdateSupplierArgs {
     pub name: Option<String>,

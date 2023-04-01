@@ -65,7 +65,7 @@ describe("implementation", () => {
     program.programId
   );
 
-  it("Creates a supplier PDA", async () => {
+  it("Creates a supplier", async () => {
     const tx = await program.methods
       .createSupplier(
         supplierArgs as CreateSupplierArgs,
@@ -95,5 +95,9 @@ describe("implementation", () => {
         total_transactions: supplier.totalTransactions,
       }, null, 2)
     );
+  });
+
+  it("Updates a supplier", async () => {
+    
   });
 });

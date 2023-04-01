@@ -14,6 +14,12 @@ use crate::args::{ supplier_args::* };
     transaction that occurs between the supplier and the business
 */
 
+pub struct Relationship {
+    pub supplier_name: String,
+    pub business_unit_name: String,
+    pub master_edition: Pubkey,
+}
+
 #[account]
 pub struct Supplier {
     pub signer: Pubkey,
@@ -31,7 +37,7 @@ pub struct Supplier {
 impl Supplier {
     pub const PREFIX: &'static [u8] = b"SUPPLIER";
 
-    pub fn calc_space(args: &CreateSupplierArgs, relationships: &Vec<Relationship>) -> usize {
+    pub fn calc_space(args: &CreateSupplierArgs) -> usize {
         32 + // signer
         8 + // discriminator
         1 + // bump
@@ -42,7 +48,7 @@ impl Supplier {
         args.email.len() + // email
         args.routing_number.len() + // routing_number (base64-bash encoded string)
         (
-            relationships.len() * (
+            6 * (
                 40 + // supplier name
                 40 + // business_unit name
                 32 // master_edition address
