@@ -34,11 +34,35 @@ pub fn create_relationship(ctx: Context<CreateRelationship>, args: CreateRelatio
     let relationship = &mut ctx.accounts.relationship;
 
     // find supplier PDA using `supplier_name`
+    let (supplier_account: Pubkey, _bump: u8) = Pubkey::find_program_address(
+        &[
+            Supplier::PREFIX.as_bytes(),
+            b"_",
+            &args.supplier_name.as_bytes(),
+            b"_",
+            ctx.accounts.signer.key.as_ref()
+        ],
+        ctx.program_id
+    );
+
     // find business unit PDA using `business_unit_name`
+    let (business_unit_account: Pubkey, _bump: u8) = Pubkey::find_program_address(
+        &[
+            BusinessUnit::PREFIX.as_bytes(),
+            b"_",
+            &args.business_unit_name.as_bytes(),
+            b"_",
+            ctx.accounts.signer.key.as_ref()
+        ],
+        ctx.program_id
+    );
 
     // assign PDAs to relationship account
+    relationship.supplier = supplier_account;
+    relationship.business_unit = business_unit_account;
 
-    // create a Master Edition NFT for the relationship
+    // TODO! create a Master Edition NFT for the relationship
+    
 
     require!(
         args.relationship_type == RelationshipType::Supplier ||
@@ -118,9 +142,33 @@ pub fn assign_relationships(ctx: Context<CreateRelationship>, args: Vec<CreateRe
         check_business_units(&args);
     }
 
-    // for each relationship, create a master edition nft
+    // for each relationship, create a pda account
+    for relationship in args.iter() {
+        create_relationship(ctx, relationship.clone())?;
+    }
 
-    // add the relationships to the supplier
+    // assign each relationship PDA to the supplier's `relationships` vector
+    for relationship in args.iter() {
+        let (relationship_account: Pubkey, _bump: u8) = Pubkey::find_program_address(
+            &[
+                Relationship::PREFIX.as_ref(),
+                b"_",
+                &relationship.supplier_name.as_bytes(),
+                b"_",
+                &relationship.business_unit_name.as_bytes(),
+                b"_",
+                ctx.accounts.signer.key.as_ref()
+            ],
+            ctx.program_id
+        );
+
+        // let relationship_account = Account::try_from(relationship_account)?;
+        // let relationship_account = relationship_account.try_borrow_mut_data()?;
+        // let relationship_account = Relationship::try_from_slice(&relationship_account)?;
+
+        // assign the relationship account to the supplier
+        supplier.relationships.push(relationship_account);
+    }
 
     Ok(())
 }
