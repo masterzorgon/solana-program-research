@@ -1,9 +1,9 @@
 use anchor_lang::prelude::*;
 
-#[derive(AnchorSerialize, AnchorDeserialize, Clone, Debug)]
+#[derive(AnchorSerialize, AnchorDeserialize, Clone, Debug, Default)]
 pub struct Relationship {
-    pub supplier: String,
-    pub business_unit: String,
+    pub supplier_name: String,
+    pub business_unit_name: String,
     pub master_edition: Pubkey,
 }
 
@@ -13,6 +13,5 @@ pub struct SupplierArgs {
     pub address: String,
     pub phone: String,
     pub email: String,
-    pub routing_number: u32,
-    pub relationships: Vec<Relationship>,
+    pub routing_number: String,
 }

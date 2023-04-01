@@ -14,8 +14,8 @@ declare_id!("A8aZpHiJhbHawHQ6g4mhaxPTXBGoc5bQecaRkro2hyGe");
 pub mod implementation {
     use super::*;
 
-    pub fn create_supplier(ctx: Context<CreateSupplier>, args: SupplierArgs) -> Result<()> {
-        create_supplier::create_supplier(ctx, args)
+    pub fn create_supplier(ctx: Context<CreateSupplier>, args: SupplierArgs, relationships: Vec<Relationship>) -> Result<()> {
+        create_supplier::create_supplier(ctx, args, relationships)
     }
 
     pub fn update_supplier(ctx: Context<UpdateSupplier>, args: SupplierArgs) -> Result<()> {

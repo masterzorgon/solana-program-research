@@ -4,100 +4,96 @@ import { Implementation } from "../../target/types/implementation";
 import { assert } from "chai";
 import fs from "fs";
 
-describe("implementation", () => {
-  const provider = anchor.AnchorProvider.env();
-  anchor.setProvider(provider);
-
-  const program = anchor.workspace.Implementation as Program<Implementation>;
-  const supplier = anchor.web3.Keypair.generate();
-  const wallet = provider.wallet;
-
-  // suppliers data
-  const SUPPLIER_PREFIX: string = "SUPPLIER";
-  const suppliers = [
-    {
-      name: "Fall Farms",
-      address: "1234 Main St",
-      phone: "123-456-7890",
-      email: "fallfarms@gmail.com",
-      routingNumber: 123456789
-    },
-    {
-      name: "Cheeky Chickens",
-      address: "131 South Ave",
-      phone: "222-333-1411",
-      email: "cheekychickens@gmail.com",
-      routingNumber: 987654321
-    },
-    {
-      name: "Corby's Cows",
-      address: "222 Crescent Rd",
-      phone: "333-444-5555",
-      email: "corbyscows@gmai.com",
-      routingNumber: 198273645,
-    }
-  ];
+ interface Relationship {
+    supplierName: string,
+    businessUnitName: string,
+    masterEdition: anchor.web3.PublicKey
+  }
 
   interface CreateSupplierArgs {
     name: string,
     address: string,
     phone: string,
     email: string,
-    routingNumber: number
+    routingNumber: string,
   }
 
+describe("implementation", () => {
+  const provider = anchor.AnchorProvider.env();
+  anchor.setProvider(provider);
+
+  const program = anchor.workspace.Implementation as Program<Implementation>;
+  const wallet = provider.wallet;
+
+  const relationships: Relationship[] = [
+    {
+      supplierName: "Fall Farms",
+      businessUnitName: "Tyson Fresh Meats",
+      masterEdition: new anchor.web3.PublicKey("BVPntDCVsbDvFWhMtqG3Ra2Q8kHcMbxCvokdKNoXuLLP")
+    },
+    {
+      supplierName: "Fall Farms",
+      businessUnitName: "Tyson Fresh Meats",
+      masterEdition: new anchor.web3.PublicKey("BVPntDCVsbDvFWhMtqG3Ra2Q8kHcMbxCvokdKNoXuLLP")
+    },
+    {
+      supplierName: "Fall Farms",
+      businessUnitName: "Tyson Fresh Meats",
+      masterEdition: new anchor.web3.PublicKey("BVPntDCVsbDvFWhMtqG3Ra2Q8kHcMbxCvokdKNoXuLLP")
+    }
+  ];
+
+  // suppliers data
+  const SUPPLIER_PREFIX: string = "SUPPLIER";
+  const supplierArgs: CreateSupplierArgs = {
+    name: "Fall Farms",
+    address: "1234 Main St",
+    phone: "123-456-7890",
+    email: "fallfarms@gmail.com",
+    routingNumber: "123456789",
+  };
+
   // get supplier PDAs
-  const supplierPDAs = suppliers.map(supplier => {
-    const [supplierPDA, _none] = anchor.web3.PublicKey.findProgramAddressSync(
-      [
-        Buffer.from(SUPPLIER_PREFIX, "utf8"),
-        Buffer.from("_", "utf8"),
-        Buffer.from(supplier.name, "utf8"),
-        Buffer.from("_", "utf8"),
-        wallet.publicKey.toBuffer()
-      ],
-      program.programId
-    );
-    return supplierPDA;
-  });
+  const [supplierPDA, _none] = anchor.web3.PublicKey.findProgramAddressSync(
+    [
+      Buffer.from(SUPPLIER_PREFIX, "utf8"),
+      Buffer.from("_", "utf8"),
+      Buffer.from(supplierArgs.name, "utf8"),
+      Buffer.from("_", "utf8"),
+      wallet.publicKey.toBuffer()
+    ],
+    program.programId
+  );
 
   it("Creates a supplier PDA", async () => {
-    suppliers.forEach(async (supplier, index) => {
-      // get supplier account PDA
-      const supplierPDA = supplierPDAs[index];
+    const tx = await program.methods
+      .createSupplier(
+        supplierArgs as CreateSupplierArgs,
+        relationships as Relationship[]
+      )
+      .accounts({
+        supplier: supplierPDA,
+        signer: wallet.publicKey,
+        systemProgram: anchor.web3.SystemProgram.programId,
+      })
+      .rpc();
+    
+    const supplier = await program.account.supplier.fetch(supplierPDA);
+    assert.equal(supplier.name.toString(), supplierArgs.name);
 
-      // create supplier account
-      const tx = await program.methods
-        .createSupplier(supplier as CreateSupplierArgs)
-        .accounts({
-          supplier: supplierPDA,
-          signer: wallet.publicKey,
-          systemProgram: anchor.web3.SystemProgram.programId,
-        })
-        .rpc();
-      
-      const supplierAccount = await program.account.supplier.fetch(supplierPDA)
-      const config = {
-          supplierBump: supplierAccount.bump.toString(),
-          supplierPDA: supplierPDAs[index].toString(),
-          supplierIdentifier: supplierAccount.identifier.toString(),
-          supplierTotalTransactions: supplierAccount.totalTransactions.toString(),
-          supplierName: supplierAccount.name.toString(),
-          supplierAddress: supplierAccount.address.toString(),
-          supplierPhone: supplierAccount.phone.toString(),
-          supplierEmail: supplierAccount.email.toString(),
-          supplierRoutingNumber: supplierAccount.routingNumber.toString(),
-          supplierInvoices: supplierAccount.invoices.toString()
-      };
-      
-      assert.equal(supplierAccount.name.toString(), supplier.name);
-
-      fs.writeFileSync(
-        "/Users/masterzorgon/Documents/Programming/personal-projects/blockchain/blockchain-research/implementation/tests/supplier-data/config.json",
-        JSON.stringify(config, null, 4)
-      );
-
-      console.log("transaction successful: ", tx);
-    });
+    fs.writeFileSync(
+      "/Users/masterzorgon/Documents/Programming/personal-projects/blockchain/blockchain-research/implementation/tests/supplier/supplier-data/create-supplier.json",
+      JSON.stringify({
+        bump: supplier.bump,
+        identifier: supplier.identifier.toString(),
+        name: supplier.name.toString(),
+        address: supplier.address.toString(),
+        phone: supplier.phone.toString(),
+        email: supplier.email.toString(),
+        routing_number: supplier.routingNumber,
+        relationships: supplier.relationships,
+        total_transactions: supplier.totalTransactions,
+      }, null, 2)
+    );
   });
 });

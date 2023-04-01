@@ -1,0 +1,27 @@
+{
+  "bump": 251,
+  "identifier": "7dA9Wv8aVsd4NRCoKN46u9E7mYwkAPs72ZTjyQsjtXfB",
+  "name": "Fall Farms",
+  "address": "1234 Main St",
+  "phone": "123-456-7890",
+  "email": "fallfarms@gmail.com",
+  "routing_number": 123456789,
+  "relationships": [
+    {
+      "supplierName": "Fall Farms",
+      "businessUnitName": "Tyson Fresh Meats",
+      "masterEdition": "BVPntDCVsbDvFWhMtqG3Ra2Q8kHcMbxCvokdKNoXuLLP"
+    },
+    {
+      "supplierName": "Fall Farms",
+      "businessUnitName": "Tyson Fresh Meats",
+      "masterEdition": "BVPntDCVsbDvFWhMtqG3Ra2Q8kHcMbxCvokdKNoXuLLP"
+    },
+    {
+      "supplierName": "Fall Farms",
+      "businessUnitName": "Tyson Fresh Meats",
+      "masterEdition": "BVPntDCVsbDvFWhMtqG3Ra2Q8kHcMbxCvokdKNoXuLLP"
+    }
+  ],
+  "total_transactions": "00"
+}
