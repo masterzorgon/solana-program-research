@@ -9,7 +9,7 @@ pub enum SupplierError {
     #[msg("The supplier address is too long")]
     SupplierAddressTooLong,
     #[msg("The supplier phone is too long")]
-    SupplierPhoneTooLong,
+    SupplierPhoneLengthMismatch,
     #[msg("The supplier email is too long")]
     SupplierEmailTooLong,
     #[msg("The supplier routing number does not meet the length requirements")]

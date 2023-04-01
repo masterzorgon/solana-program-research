@@ -16,6 +16,7 @@ use crate::args::{ supplier_args::* };
 
 #[account]
 pub struct Supplier {
+    pub signer: Pubkey,
     pub bump: u8,
     pub identifier: Pubkey,
     pub name: String,
@@ -30,7 +31,8 @@ pub struct Supplier {
 impl Supplier {
     pub const PREFIX: &'static [u8] = b"SUPPLIER";
 
-    pub fn calc_space(args: &SupplierArgs, relationships: &Vec<Relationship>) -> usize {
+    pub fn calc_space(args: &CreateSupplierArgs, relationships: &Vec<Relationship>) -> usize {
+        32 + // signer
         8 + // discriminator
         1 + // bump
         32 + // identifier

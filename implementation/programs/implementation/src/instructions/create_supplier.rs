@@ -5,7 +5,7 @@ use crate::errors::{ supplier_errors::* };
 use crate::args::{ supplier_args::* };
 
 #[derive(Accounts)]
-#[instruction(args: SupplierArgs, relationships: Vec<Relationship>)]
+#[instruction(args: CreateSupplierArgs, relationships: Vec<Relationship>)]
 pub struct CreateSupplier<'info> {
     #[account(
         init_if_needed, // initializes the account if it does not exist
@@ -30,7 +30,7 @@ pub struct CreateSupplier<'info> {
 
 pub fn create_supplier(
     ctx: Context<CreateSupplier>, 
-    args: SupplierArgs,
+    args: CreateSupplierArgs,
     relationships: Vec<Relationship>
 ) -> Result<()> {
     let supplier = &mut ctx.accounts.supplier;
@@ -46,6 +46,7 @@ pub fn create_supplier(
         ctx.program_id
     );
     
+    supplier.signer = *ctx.accounts.signer.key;
     supplier.bump = bump;
     supplier.identifier = addr;
 
@@ -66,7 +67,7 @@ pub fn create_supplier(
     supplier.address = args.address;
 
     // make sure phone is not too long
-    require!(args.phone.len() <= 40 && args.phone.len() >= 10, SupplierError::SupplierPhoneTooLong);
+    require!(args.phone.len() <= 40 && args.phone.len() >= 10, SupplierError::SupplierPhoneLengthMismatch);
     supplier.phone = args.phone;
 
     // make sure email is not too long

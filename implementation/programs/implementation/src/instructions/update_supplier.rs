@@ -1,50 +1,56 @@
 use anchor_lang::prelude::*;
 
-use crate::args::{ supplier_args::SupplierArgs };
-use crate::state::{ supplier::Supplier };
-use crate::errors::{ supplier_errors::SupplierError };
+use crate::args::{ supplier_args::* };
+use crate::state::{ supplier::* };
+use crate::errors::{ supplier_errors::* };
 
 #[derive(Accounts)]
-#[instruction(args: SupplierArgs)]
+#[instruction(args: UpdateSupplierArgs)]
 pub struct UpdateSupplier<'info> {
     #[account(
         mut,
         seeds = [
             Supplier::PREFIX.as_ref(),
             b"_",
-            &args.name.as_bytes(),
+            &args.name.unwrap().as_bytes(),
             b"_",
             signer.key.as_ref()
         ],
         bump = supplier.bump,
+        has_one = signer
     )]
     pub supplier: Account<'info, Supplier>,
     
     pub signer: Signer<'info>,
 }
 
-pub fn update_supplier(ctx: Context<UpdateSupplier>, args: SupplierArgs) -> Result<()> {
+pub fn update_supplier(ctx: Context<UpdateSupplier>, args: UpdateSupplierArgs) -> Result<()> {
     let supplier = &mut ctx.accounts.supplier;
 
-    // make sure name is not too long
-    require!(args.name.len() <= 40, SupplierError::SupplierNameTooLong);
-    supplier.name = args.name;
+    if let Some(name) = args.name { 
+        require!(name.len() <= 40, SupplierError::SupplierNameTooLong);
+        supplier.name = name;
+    }
 
-    // make sure address is not too long
-    require!(args.address.len() <= 40, SupplierError::SupplierAddressTooLong);
-    supplier.address = args.address;
+    if let Some(address) = args.address { 
+        require!(address.len() <= 40, SupplierError::SupplierAddressTooLong);
+        supplier.address = address;
+    }
 
-    // make sure phone is not too long
-    require!(args.phone.len() <= 40 && args.phone.len() >= 10, SupplierError::SupplierPhoneTooLong);
-    supplier.phone = args.phone;
+    if let Some(phone) = args.phone { 
+        require!(phone.len() <= 40 && phone.len() >= 10, SupplierError::SupplierPhoneLengthMismatch);
+        supplier.phone = phone;
+    }
 
-    // make sure email is not too long
-    require!(args.email.len() <= 40, SupplierError::SupplierEmailTooLong);
-    supplier.email = args.email;
+    if let Some(email) = args.email { 
+        require!(email.len() <= 40, SupplierError::SupplierEmailTooLong);
+        supplier.email = email;
+    }
 
-    // make sure routing number is 9 digits
-    require!(args.routing_number.to_string().len() == 9, SupplierError::SupplierRoutingNumberLengthMismatch);
-    supplier.routing_number = args.routing_number;
+    if let Some(routing_number) = args.routing_number { 
+        require!(routing_number.len() == 12, SupplierError::SupplierRoutingNumberLengthMismatch);
+        supplier.routing_number = routing_number;
+    }
 
     Ok(())
 }
