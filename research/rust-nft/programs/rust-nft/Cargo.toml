@@ -1,12 +1,12 @@
 [package]
-name = "implementation"
+name = "rust-nft"
 version = "0.1.0"
 description = "Created with Anchor"
 edition = "2021"
 
 [lib]
 crate-type = ["cdylib", "lib"]
-name = "implementation"
+name = "rust_nft"
 
 [features]
 no-entrypoint = []
@@ -16,6 +16,6 @@ cpi = ["no-entrypoint"]
 default = []
 
 [dependencies]
-anchor-lang = { version = "0.25.0", default-features = false, features = ["init-if-needed"] }
+anchor-lang = "0.25.0"
 anchor-spl = "0.24.2"
 mpl-token-metadata = { version = "1.2.5", features = [ "no-entrypoint" ] }
