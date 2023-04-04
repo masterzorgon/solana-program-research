@@ -120,7 +120,7 @@ pub mod rust_nft {
         )?;
 
         msg!("Creating master edition account...");
-        msg!("Master edition metadata account address: {}", ctx.accounts.master_edition.to_account_info().key());
+        msg!("Master edition metadata account address: {}", &ctx.accounts.master_edition.to_account_info().key());
         invoke(
             &token_instruction::create_master_edition_v2(
                 TOKEN_METADATA_ID,
