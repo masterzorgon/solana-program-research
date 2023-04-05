@@ -1,11 +1,9 @@
 use anchor_lang::prelude::*;
 
-mod args;
 mod state;
 mod errors;
 mod instructions;
 
-use args::supplier_args::*;
 use instructions::*;
 
 declare_id!("A8aZpHiJhbHawHQ6g4mhaxPTXBGoc5bQecaRkro2hyGe");
@@ -14,15 +12,7 @@ declare_id!("A8aZpHiJhbHawHQ6g4mhaxPTXBGoc5bQecaRkro2hyGe");
 pub mod implementation {
     use super::*;
 
-    pub fn create_supplier(ctx: Context<CreateSupplier>, args: CreateSupplierArgs) -> Result<()> {
-        create_supplier::create_supplier(ctx, args)
-    }
-
-    pub fn update_supplier(ctx: Context<UpdateSupplier>, args: UpdateSupplierArgs) -> Result<()> {
-        update_supplier::update_supplier(ctx, args)
-    }
-
-    pub fn assign_relationships(ctx: Context<CreateRelationship>, args: Vec<CreateRelationshipArgs>) -> Result<()> {
-        create_relationship::assign_relationships(ctx, args)
+    pub fn create_business_unit(ctx: Context<CreateBusinessUnit>, args: CreateBusinessUnitArgs) -> Result<()> {
+        create_business_unit::create_business_unit(ctx, args)
     }
 }
