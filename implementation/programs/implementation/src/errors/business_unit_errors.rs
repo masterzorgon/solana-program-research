@@ -1,7 +1,7 @@
 use anchor_lang::prelude::*;
 
 #[error_code]
-pub struct BusinessUnitError {
+pub enum BusinessUnitError {
     #[msg("Company name size invalid")]
     CompanyNameSizeInvalid,
 

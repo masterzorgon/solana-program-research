@@ -17,5 +17,3 @@ default = []
 
 [dependencies]
 anchor-lang = { version = "0.25.0", default-features = false, features = ["init-if-needed"] }
-anchor-spl = "0.24.2"
-mpl-token-metadata = { version = "1.2.5", features = [ "no-entrypoint" ] }

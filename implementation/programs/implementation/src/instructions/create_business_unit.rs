@@ -3,7 +3,7 @@ use anchor_lang::prelude::*;
 use crate::state::{ business_unit::* };
 use crate::errors::{ business_unit_errors::* };
 
-#[derive(AnchorDeserialize, AnchorSerialize, CLone, Debug)]
+#[derive(AnchorDeserialize, AnchorSerialize, Clone, Debug)]
 pub struct CreateBusinessUnitArgs {
     pub company_name: String,
     pub address: String,
@@ -18,7 +18,7 @@ pub struct CreateBusinessUnitArgs {
 #[instruction(args: CreateBusinessUnitArgs)]
 pub struct CreateBusinessUnit<'info> {
     #[account(
-        init,
+        init_if_needed,
         seeds = [
             BusinessUnit::PREFIX,
             b"_",
@@ -26,10 +26,10 @@ pub struct CreateBusinessUnit<'info> {
             b"_",
             &args.business_unit_name.as_bytes(),
             b"_",
-            signer.key.as_ref()
+            authority.key.as_ref()
         ],
         bump,
-        payer = signer,
+        payer = authority,
         space = BusinessUnit::calc_space(&args)
     )]
     pub business_unit: Account<'info, BusinessUnit>,
@@ -37,14 +37,16 @@ pub struct CreateBusinessUnit<'info> {
     #[account(mut)]
     pub authority: Signer<'info>,
 
-    pub system_program: Program<'info, System>
+    pub system_program: Program<'info, System>,
+
+    pub clock: Sysvar<'info, Clock>
 }
 
 pub fn create_business_unit(ctx: Context<CreateBusinessUnit>, args: CreateBusinessUnitArgs) -> Result<()> {
-    let business_unit: Account<BusinessUnit> = &mut ctx.accounts.business_unit;
+    let business_unit: &mut Account<BusinessUnit> = &mut ctx.accounts.business_unit;
 
     msg!("Fetching address and bump of business unit PDA.");
-    let (address, bump) = Pubkey::find_program_address(
+    let (pda, bump) = Pubkey::find_program_address(
         &[
             BusinessUnit::PREFIX,
             b"_",
@@ -52,7 +54,7 @@ pub fn create_business_unit(ctx: Context<CreateBusinessUnit>, args: CreateBusine
             b"_",
             &args.business_unit_name.as_bytes(),
             b"_",
-            signer.key.as_ref()
+            ctx.accounts.authority.key.as_ref()
         ],
         ctx.program_id
     );
@@ -83,7 +85,7 @@ pub fn create_business_unit(ctx: Context<CreateBusinessUnit>, args: CreateBusine
 
     business_unit.created_at = ctx.accounts.clock.unix_timestamp;
     business_unit.bump = bump;
-    business_unit.address = address;
+    business_unit.pda = pda;
 
     msg!("Business unit PDA created successfully!");
     Ok(())
