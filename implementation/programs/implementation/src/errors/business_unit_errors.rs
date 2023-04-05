@@ -21,5 +21,8 @@ pub enum BusinessUnitError {
     PhoneSizeInvalid,
     
     #[msg("Routing number size invalid")]
-    RoutingNumberSizeInvalid
+    RoutingNumberSizeInvalid,
+
+    #[msg("Business unit type invalid")]
+    BusinessUnitTypeInvalid
 }

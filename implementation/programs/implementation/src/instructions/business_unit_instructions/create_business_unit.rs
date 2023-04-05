@@ -11,7 +11,9 @@ pub struct CreateBusinessUnitArgs {
     pub supervisor: String,
     pub email: String,
     pub phone: String,
-    pub routing_number: String
+    pub routing_number: String,
+    pub business_unit_type: BusinessUnitType,
+    pub relationship_function: RelationshipFunction,
 }
 
 #[derive(Accounts)]
@@ -39,13 +41,14 @@ pub struct CreateBusinessUnit<'info> {
 
     pub system_program: Program<'info, System>,
 
-    pub clock: Sysvar<'info, Clock>
+    pub clock: Sysvar<'info, Clock>,
 }
 
 pub fn create_business_unit(ctx: Context<CreateBusinessUnit>, args: CreateBusinessUnitArgs) -> Result<()> {
     let business_unit: &mut Account<BusinessUnit> = &mut ctx.accounts.business_unit;
 
     msg!("Fetching address and bump of business unit PDA.");
+
     let (pda, bump) = Pubkey::find_program_address(
         &[
             BusinessUnit::PREFIX,
@@ -59,7 +62,24 @@ pub fn create_business_unit(ctx: Context<CreateBusinessUnit>, args: CreateBusine
         ctx.program_id
     );
 
-    msg!("Assigning data values to business unit PDA attributes.");
+    msg!("Initializing data values to business unit PDA attributes.");
+
+    match args.business_unit_type {
+        BusinessUnitType::Supplier =>       business_unit.business_unit_type = BusinessUnitType::Supplier,
+        BusinessUnitType::Contractor =>     business_unit.business_unit_type = BusinessUnitType::Contractor,
+        BusinessUnitType::Manufacturer =>   business_unit.business_unit_type = BusinessUnitType::Manufacturer,
+        BusinessUnitType::Distributor =>    business_unit.business_unit_type = BusinessUnitType::Distributor,
+        BusinessUnitType::Retailer =>       business_unit.business_unit_type = BusinessUnitType::Retailer,
+        BusinessUnitType::Purchaser =>      business_unit.business_unit_type = BusinessUnitType::Purchaser,
+        _ => return Err(BusinessUnitError::BusinessUnitTypeInvalid.into()),
+    }
+
+    match args.relationship_function {
+        RelationshipFunction::Buyer =>      business_unit.relationship_function = RelationshipFunction::Buyer,
+        RelationshipFunction::Seller =>     business_unit.relationship_function = RelationshipFunction::Seller,
+        _ => return Err(BusinessUnitError::BusinessUnitTypeInvalid.into()),
+    }
+
     require!(args.company_name.len() <= 30, BusinessUnitError::CompanyNameSizeInvalid);
     business_unit.company_name = args.company_name;
 
@@ -88,5 +108,6 @@ pub fn create_business_unit(ctx: Context<CreateBusinessUnit>, args: CreateBusine
     business_unit.pda = pda;
 
     msg!("Business unit PDA created successfully!");
+
     Ok(())
 }

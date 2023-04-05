@@ -11,7 +11,7 @@ pub struct UpdateBusinessUnitArgs {
     pub supervisor: Option<String>,
     pub email: Option<String>,
     pub phone: Option<String>,
-    pub routing_number: Option<String>
+    pub routing_number: Option<String>,
 }
 
 #[derive(Accounts)]
@@ -38,7 +38,7 @@ pub struct UpdateBusinessUnit<'info> {
 pub fn update_business_unit(ctx: Context<UpdateBusinessUnit>, args: UpdateBusinessUnitArgs) -> Result<()> {
     let business_unit: &mut Account<BusinessUnit> = &mut ctx.accounts.business_unit;
 
-    msg!("Assigning data values to business unit PDA attributes.");
+    msg!("Updating data values to business unit PDA attributes.");
     if let Some(company_name) = args.company_name {
         require!(company_name.len() <= 30, BusinessUnitError::CompanyNameSizeInvalid);
         business_unit.company_name = company_name;
@@ -74,6 +74,6 @@ pub fn update_business_unit(ctx: Context<UpdateBusinessUnit>, args: UpdateBusine
         business_unit.routing_number = routing_number;
     }
 
-    msg!("Business unit PDA created successfully!");
+    msg!("Business unit PDA updated successfully!");
     Ok(())
 }

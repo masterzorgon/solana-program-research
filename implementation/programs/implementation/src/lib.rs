@@ -4,7 +4,9 @@ mod state;
 mod errors;
 mod instructions;
 
-use instructions::*;
+use instructions::{
+    business_unit_instructions::*
+};
 
 declare_id!("A8aZpHiJhbHawHQ6g4mhaxPTXBGoc5bQecaRkro2hyGe");
 
