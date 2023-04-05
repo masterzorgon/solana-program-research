@@ -15,4 +15,8 @@ pub mod implementation {
     pub fn create_business_unit(ctx: Context<CreateBusinessUnit>, args: CreateBusinessUnitArgs) -> Result<()> {
         create_business_unit::create_business_unit(ctx, args)
     }
+
+    pub fn update_business_unit(ctx: Context<UpdateBusinessUnit>, args: UpdateBusinessUnitArgs) -> Result<()> {
+        update_business_unit::update_business_unit(ctx, args)
+    }
 }
