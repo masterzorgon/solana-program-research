@@ -1,14 +1,14 @@
 [features]
 seeds = false
 skip-lint = false
-[programs.localnet]
+[programs.devnet]
 implementation = "A8aZpHiJhbHawHQ6g4mhaxPTXBGoc5bQecaRkro2hyGe"
 
 [registry]
 url = "https://api.apr.dev"
 
 [provider]
-cluster = "localnet"
+cluster = "devnet"
 wallet = "/Users/masterzorgon/.config/solana/id.json"
 
 [scripts]

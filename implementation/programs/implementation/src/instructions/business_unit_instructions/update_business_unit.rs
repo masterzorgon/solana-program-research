@@ -39,6 +39,7 @@ pub fn update_business_unit(ctx: Context<UpdateBusinessUnit>, args: UpdateBusine
     let business_unit: &mut Account<BusinessUnit> = &mut ctx.accounts.business_unit;
 
     msg!("Updating data values to business unit PDA attributes.");
+    
     if let Some(company_name) = args.company_name {
         require!(company_name.len() <= 30, BusinessUnitError::CompanyNameSizeInvalid);
         business_unit.company_name = company_name;
@@ -75,5 +76,6 @@ pub fn update_business_unit(ctx: Context<UpdateBusinessUnit>, args: UpdateBusine
     }
 
     msg!("Business unit PDA updated successfully!");
+
     Ok(())
 }

@@ -5,7 +5,8 @@ mod errors;
 mod instructions;
 
 use instructions::{
-    business_unit_instructions::*
+    business_unit_instructions::*,
+    relationship_instructions::*,
 };
 
 declare_id!("A8aZpHiJhbHawHQ6g4mhaxPTXBGoc5bQecaRkro2hyGe");
@@ -20,5 +21,9 @@ pub mod implementation {
 
     pub fn update_business_unit(ctx: Context<UpdateBusinessUnit>, args: UpdateBusinessUnitArgs) -> Result<()> {
         update_business_unit::update_business_unit(ctx, args)
+    }
+
+    pub fn create_relationship(ctx: Context<CreateRelationship>) -> Result<()> {
+        create_relationship::create_relationship(ctx)
     }
 }

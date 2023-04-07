@@ -1,3 +1,15 @@
+// ALTERNATIVE METHOD
+
+// pub fn delete_movie_review(ctx: Context<DestroyUserContext>) -> Result<()> {
+//     let movie_review: &mut Signer = &mut ctx.accounts.movie_review;
+//     let initializer: &mut Account<UserAccount> = &mut ctx.accounts.initializer;
+
+//     // leftover rent is sent back to the user
+//     movie_review.close(initializer.to_account_info())?;
+
+//     Ok(())
+// }
+
 // no logic needed. closing the account is handled by the runtime, invoked by DeleteMovieReview
 pub fn delete_movie_review(
     ctx: Context<DeleteMovieReview>,

@@ -65,18 +65,18 @@ pub fn create_business_unit(ctx: Context<CreateBusinessUnit>, args: CreateBusine
     msg!("Initializing data values to business unit PDA attributes.");
 
     match args.business_unit_type {
-        BusinessUnitType::Supplier =>       business_unit.business_unit_type = BusinessUnitType::Supplier,
-        BusinessUnitType::Contractor =>     business_unit.business_unit_type = BusinessUnitType::Contractor,
-        BusinessUnitType::Manufacturer =>   business_unit.business_unit_type = BusinessUnitType::Manufacturer,
-        BusinessUnitType::Distributor =>    business_unit.business_unit_type = BusinessUnitType::Distributor,
-        BusinessUnitType::Retailer =>       business_unit.business_unit_type = BusinessUnitType::Retailer,
-        BusinessUnitType::Purchaser =>      business_unit.business_unit_type = BusinessUnitType::Purchaser,
+        BusinessUnitType::Supplier => business_unit.business_unit_type = BusinessUnitType::Supplier,
+        BusinessUnitType::Contractor => business_unit.business_unit_type = BusinessUnitType::Contractor,
+        BusinessUnitType::Manufacturer => business_unit.business_unit_type = BusinessUnitType::Manufacturer,
+        BusinessUnitType::Distributor => business_unit.business_unit_type = BusinessUnitType::Distributor,
+        BusinessUnitType::Retailer => business_unit.business_unit_type = BusinessUnitType::Retailer,
+        BusinessUnitType::Purchaser => business_unit.business_unit_type = BusinessUnitType::Purchaser,
         _ => return Err(BusinessUnitError::BusinessUnitTypeInvalid.into()),
     }
 
     match args.relationship_function {
-        RelationshipFunction::Buyer =>      business_unit.relationship_function = RelationshipFunction::Buyer,
-        RelationshipFunction::Seller =>     business_unit.relationship_function = RelationshipFunction::Seller,
+        RelationshipFunction::Buyer => business_unit.relationship_function = RelationshipFunction::Buyer,
+        RelationshipFunction::Seller => business_unit.relationship_function = RelationshipFunction::Seller,
         _ => return Err(BusinessUnitError::BusinessUnitTypeInvalid.into()),
     }
 
