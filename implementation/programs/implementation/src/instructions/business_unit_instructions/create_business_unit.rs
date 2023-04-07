@@ -2,6 +2,7 @@ use anchor_lang::prelude::*;
 
 use crate::state::{ business_unit::* };
 use crate::errors::{ business_unit_errors::* };
+use crate::utils::*;
 
 #[derive(AnchorDeserialize, AnchorSerialize, Clone, Debug)]
 pub struct CreateBusinessUnitArgs {
@@ -24,9 +25,9 @@ pub struct CreateBusinessUnit<'info> {
         seeds = [
             BusinessUnit::PREFIX,
             b"_",
-            &args.company_name.as_bytes(),
+            name_seed(&args.company_name),
             b"_",
-            &args.business_unit_name.as_bytes(),
+            name_seed(&args.business_unit_name),
             b"_",
             authority.key.as_ref()
         ],
@@ -53,9 +54,9 @@ pub fn create_business_unit(ctx: Context<CreateBusinessUnit>, args: CreateBusine
         &[
             BusinessUnit::PREFIX,
             b"_",
-            &args.company_name.as_bytes(),
+            name_seed(&args.company_name),
             b"_",
-            &args.business_unit_name.as_bytes(),
+            name_seed(&args.business_unit_name),
             b"_",
             ctx.accounts.authority.key.as_ref()
         ],
@@ -106,6 +107,7 @@ pub fn create_business_unit(ctx: Context<CreateBusinessUnit>, args: CreateBusine
     business_unit.created_at = ctx.accounts.clock.unix_timestamp;
     business_unit.bump = bump;
     business_unit.pda = pda;
+    business_unit.authority = *ctx.accounts.authority.key;
 
     msg!("Business unit PDA created successfully!");
 

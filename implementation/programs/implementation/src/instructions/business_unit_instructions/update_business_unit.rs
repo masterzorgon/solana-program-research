@@ -19,12 +19,13 @@ pub struct UpdateBusinessUnitArgs {
 pub struct UpdateBusinessUnit<'info> {
     #[account(
         mut,
+        has_one = authority @ BusinessUnitError::WrongBusinessUnitAuthority,
         seeds = [
             BusinessUnit::PREFIX,
             b"_",
-            &args.company_name.unwrap().as_bytes(),
+            name_seed(&args.company_name),
             b"_",
-            &args.business_unit_name.unwrap().as_bytes(),
+            name_seed(&args.business_unit_name),
             b"_",
             authority.key.as_ref()
         ],

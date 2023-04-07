@@ -24,5 +24,8 @@ pub enum BusinessUnitError {
     RoutingNumberSizeInvalid,
 
     #[msg("Business unit type invalid")]
-    BusinessUnitTypeInvalid
+    BusinessUnitTypeInvalid,
+
+    #[msg("Business unit authority invalid")]
+    WrongBusinessUnitAuthority
 }
